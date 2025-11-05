@@ -7,7 +7,7 @@ It detects your OS (Arch, Debian/Ubuntu, Fedora/RHEL/Rocky/Alma) and launches th
 ./install-fuzzypackinstaller.sh
 ```
 
-Once installed, you can open a fuzzy search menu and install packages directly from your system repositories (or AUR on Arch).
+Once installed, you can open a fuzzy search menu and install packages directly from your system repositories (or AUR on Arch) as well as optionally snaps and flatpaks from their repositories (snapcraft and flathub, respectively).
 
 ## Features
 
@@ -22,7 +22,7 @@ Once installed, you can open a fuzzy search menu and install packages directly f
   - Live search + preview
   - Install marked packages without closing menu
 - Cross-shell support (works in Bash, Fish, Zsh)
-- Self-contained scripts — no dependencies beyond fzf, curl, and your package manager
+- Self-contained scripts — no dependencies beyond fzf, curl, and your package manager (except possibly for optional snap or flatpak packages)
 
 ## Installation
 
@@ -143,4 +143,3 @@ GPL-3.0 license © 2025 klokom
 - [ ] Add openSUSE (zypper) support  
 - [ ] Optional non-interactive mode for automation  
 - [ ] Version check and self-update utility  
-- [ ] Plugin-style architecture for other managers (flatpak, snap, pip)
