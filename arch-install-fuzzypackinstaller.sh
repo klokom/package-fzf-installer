@@ -184,11 +184,7 @@ sudo -v || true
 
 build_index() {
   if [[ -n "$AUR_HELPER" ]]; then
-    if [[ "$AUR_HELPER" == "paru" ]]; then
-      paru -Slq aur 2>/dev/null || paru -Sl aur 2>/dev/null | awk '{print $2}'
-    else
-      yay -Sl aur 2>/dev/null | awk '{print $2}'
-    fi
+    curl -s 'https://aur.archlinux.org/packages.gz' | gunzip -c 2>/dev/null || true
   else
     :
   fi
@@ -250,9 +246,6 @@ printf '%s\n' "${ALL_PKGS[@]}" | \
         echo; echo \"✔ Installed (AUR): \${names[*]}\"; echo \"(Press any key to continue)\"; read -n1 < /dev/tty
       '
     )+clear-selection"
-PKG_AUR_INSTALL_EOF
-
-
 echo "=> Installing scripts to $DEST"
 sudo install -Dm755 "$TMP_DIR/pkg-install"      "$DEST/pkg-install"
 sudo install -Dm755 "$TMP_DIR/pkg-aur-install"  "$DEST/pkg-aur-install"
