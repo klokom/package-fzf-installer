@@ -170,13 +170,22 @@ printf '%s\n' "${ALL_PKGS[@]}" | \
     --prompt='Install (flatpak flathub)> ' \
     --height=90% --border \
     --preview "
-      $BASH_BIN -lc '
-        set +u
-        appid=\"{}\"
-        [[ -n \"\${appid-}\" ]] || { echo \"Type to search; TAB to multi-select\"; exit 0; }
-        flatpak info \"\$appid\" 2>/dev/null | sed -n \"1,80p\" || echo \"No info\"
-      '
-    " \
+        $BASH_BIN -lc '
+            set +u
+            appid=\"{}\"
+            [[ -n \"\${appid-}\" ]] || { echo \"Type to search; TAB to multi-select\"; exit 0; }
+
+            # Show name + summary from remote-ls (fast and readable)
+            flatpak remote-ls --app --columns=application,name,description flathub 2>/dev/null |
+              grep -m1 \"^\$appid[[:space:]]\" |
+              awk -F\"\t\" \"{print \\\$2 \\\" \\\" \\\$3}\" || echo \"No description available\"
+
+            echo
+            echo \"--- Full details ---\"
+
+            flatpak remote-info flathub \"\$appid\" 2>/dev/null || echo \"(no additional info)\"
+          '
+        " \
     --preview-window=right:70%:wrap \
     --bind "tab:toggle+down,space:toggle" \
     --bind "alt-a:select-all,alt-d:deselect-all,alt-t:toggle-all" \
@@ -202,6 +211,7 @@ printf '%s\n' "${ALL_PKGS[@]}" | \
         printf \"\033[2J\033[3J\033[H\" > /dev/tty
       '
     )+clear-selection"
+
 FLATPAK_EOF
 
   echo "=> Installing pkg-flatpak-install to $DEST"
